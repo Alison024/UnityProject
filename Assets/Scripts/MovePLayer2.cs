@@ -30,9 +30,14 @@ public class MovePLayer2 : NetworkBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (!isLocalPlayer)
+        {
+            // exit from update if this is not the local player
+            return;
+        }
         double horizontal = Input.GetAxis("Horizontal");
         double vertical = Input.GetAxis("Vertical");
-
+        
         if (horizontal < 0 && vertical == 0)//move left
         {
             isBehindRun = false;
