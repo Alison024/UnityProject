@@ -7,12 +7,13 @@ public class ShootBullets : NetworkBehaviour
 {
     public GameObject bulletPrefab;
     public float bulletSpeed;
-    public GameObject bulletSpawnPosition;
+    [SerializeField]
+    private GameObject bulletSpawnPosition;
     // Start is called before the first frame update
     void Start()
     {
-        /*Transform transform = this.transform.Find("BulletStartPosition");
-        if (transform != null)
+        bulletSpawnPosition = transform.GetChild(0).gameObject.transform.GetChild(1).gameObject;
+        /*if (transform != null)
         {
             bulletSpawnPosition = transform.gameObject;
         }
@@ -27,18 +28,16 @@ public class ShootBullets : NetworkBehaviour
     {
         if (this.isLocalPlayer && Input.GetMouseButtonDown(0))
         {
-            
-            this.BulletShoot(new Vector2(bulletSpawnPosition.transform.position.x, 0));
+            this.BulletShoot(bulletSpawnPosition.transform.right);
         }
     }
     [Command]
     void BulletShoot(Vector2 vector)
     {
         GameObject bullet = Instantiate(bulletPrefab, bulletSpawnPosition.transform.position, Quaternion.identity);
-        Debug.Log("Shoot");
+        Debug.Log(vector.ToString());
         bullet.GetComponent<Rigidbody2D>().velocity = vector * bulletSpeed;
         NetworkServer.Spawn(bullet);
-
         Destroy(bullet, 1.0f);
 
     }

@@ -406,5 +406,5 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   bulletPrefab: {fileID: 3723024990032869157, guid: 455174023f4784f4683aaf65d860c244, type: 3}
-  bulletSpeed: 1
-  bulletSpawnPosition: {fileID: 3153824663825252316}
+  bulletSpeed: 15
+  bulletSpawnPosition: {fileID: 0}
