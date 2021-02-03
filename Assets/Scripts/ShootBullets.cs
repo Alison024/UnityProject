@@ -6,22 +6,15 @@ using Mirror;
 public class ShootBullets : NetworkBehaviour
 {
     public GameObject bulletPrefab;
-    public float bulletSpeed;
+    [SerializeField]
+    private float bulletSpeed;
     [SerializeField]
     private GameObject bulletSpawnPosition;
     // Start is called before the first frame update
     void Start()
     {
         bulletSpawnPosition = transform.GetChild(1).gameObject;
-            
-        /*if (transform != null)
-        {
-            bulletSpawnPosition = transform.gameObject;
-        }
-        else
-        {
-            bulletSpawnPosition = null;
-        }*/
+        bulletSpeed = 15;
     }
 
     // Update is called once per frame
@@ -30,17 +23,15 @@ public class ShootBullets : NetworkBehaviour
         if (this.isLocalPlayer && Input.GetMouseButtonDown(0))
         {
             this.BulletShoot(bulletSpawnPosition.transform.right);
-            Debug.Log(bulletSpawnPosition == null);
         }
     }
+
     [Command]
     void BulletShoot(Vector2 vector)
     {
         GameObject bullet = Instantiate(bulletPrefab, bulletSpawnPosition.transform.position, Quaternion.identity);
-        Debug.Log(vector.ToString());
         bullet.GetComponent<Rigidbody2D>().velocity = vector * bulletSpeed;
         NetworkServer.Spawn(bullet);
         Destroy(bullet, 1.0f);
-
     }
 }

@@ -2,18 +2,22 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ak47 : MonoBehaviour
+public class AK47 : MonoBehaviour
 {
     // Start is called before the first frame update
-    public GameObject bulletStartPosition;
+    private GameObject bulletStartPosition;
     void Start()
     {
-        
+        bulletStartPosition = transform.GetChild(1).gameObject;
     }
 
     // Update is called once per frame
     void Update()
     {
         
+    }
+    public GameObject GetBulletStartPosition()
+    {
+        return bulletStartPosition;
     }
 }
