@@ -12,7 +12,8 @@ public class ShootBullets : NetworkBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        bulletSpawnPosition = transform.GetChild(0).gameObject.transform.GetChild(1).gameObject;
+        bulletSpawnPosition = transform.GetChild(1).gameObject;
+            
         /*if (transform != null)
         {
             bulletSpawnPosition = transform.gameObject;
@@ -29,6 +30,7 @@ public class ShootBullets : NetworkBehaviour
         if (this.isLocalPlayer && Input.GetMouseButtonDown(0))
         {
             this.BulletShoot(bulletSpawnPosition.transform.right);
+            Debug.Log(bulletSpawnPosition == null);
         }
     }
     [Command]
