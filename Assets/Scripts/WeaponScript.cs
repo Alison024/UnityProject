@@ -11,32 +11,31 @@ public class WeaponScript : NetworkBehaviour
     private float bulletSpeed;
     [SerializeField]
     private GameObject bulletSpawnPosition;
-
+    [SerializeField]
     private GameObject weapon;
+    [SerializeField]
+    private GameObject weaponChild;
 
 
     // Start is called before the first frame update
     void Start()
     {
-        /*if (transform.Find("Weapon").childCount != 0)
-        {
-            bulletSpawnPosition = transform.Find("Weapon").GetChild(1).gameObject;
-        }
-        bulletSpeed = 15;*/
+        weapon = transform.Find("Weapon").gameObject;
+        bulletSpeed = 15;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (transform.Find("Weapon").childCount == 0)
+        if (weapon.transform.childCount == 0)
         {
             return;
         }
 
-        /*if (this.isLocalPlayer && Input.GetMouseButtonDown(0))
+        if (this.isLocalPlayer && Input.GetMouseButtonDown(0))
         {
             this.CmdBulletShoot(bulletSpawnPosition.transform.right);
-        }*/
+        }
     }
 
     [Command]
@@ -47,18 +46,12 @@ public class WeaponScript : NetworkBehaviour
         NetworkServer.Spawn(bullet);
         Destroy(bullet, 1.0f);
     }
-    /*private void CheckBulletSpawnPosition()
+    public void PickUpWeapon(GameObject weaponPrefab)
     {
-        bulletSpawnPosition = transform.Find("Weapon").GetChild(1).gameObject;
-    }
-    private void CheckWeaponCharacteristic()
-    {
-        //IWeapon weapon = 
-    }*/
-    public void PickUpWeapon()
-    {
-        weapon = transform.Find("Weapon").GetChild(0).gameObject;
-        
+
+        weaponChild = Instantiate(weaponPrefab, weapon.transform.position, weapon.transform.rotation);//Quaternion.identity
+        weaponChild.transform.parent = weapon.transform;
+        bulletSpawnPosition = weaponChild.transform.GetChild(1).gameObject;
     }
 
 }

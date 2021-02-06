@@ -5,35 +5,36 @@ using Mirror;
 public class WeaponItem : NetworkBehaviour
 {
     public GameObject weaponPrefab;
+    [SerializeField]
     private GameObject childrenWeapon;
-    //private WeaponСharacteristics weaponСharacteristics;
 
     void Start()
     {
-        childrenWeapon = Instantiate(weaponPrefab,new Vector3(0, 0, 1), Quaternion.identity);
+        //v1
+        //childrenWeapon = Instantiate(weaponPrefab,new Vector3(0, 0, 1), Quaternion.identity);
+        //childrenWeapon.transform.parent = transform;
+        //v2
+        //childrenWeapon = Instantiate(weaponPrefab);
+        //childrenWeapon.transform.parent = transform;
+        //childrenWeapon.transform.position = new Vector3(0, 0, 1);
+        //v1==v2
+        //v3
+        childrenWeapon = Instantiate(weaponPrefab,transform.position, Quaternion.identity);
         childrenWeapon.transform.parent = transform;
-        //IWeapon weaponscript = (IWeapon)childrenWeapon.GetComponent(transform.name);
-        //weaponСharacteristics = weaponscript.GetWeaponСharacteristics();
     }
 
-    // Update is called once per frame
-    /*void Update()
+    void Update()
     {
-        Debug.Log(weaponPrefab.name + "!!!!");
-    }*/
-
+    }
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if(collision.tag == "Player")
+        if (collision.tag == "Player")
         {
-            Debug.Log("Player collision");
-            childrenWeapon.transform.parent = collision.transform.Find("Weapon").transform;
+            WeaponScript script = (WeaponScript)collision.GetComponent("WeaponScript");
+            script.PickUpWeapon(weaponPrefab);
             Destroy(transform.gameObject);
         }
-        else
-        {
-            Debug.Log("Not Player collision");
-        }
     }
-    //private void CkeckChildComponents
+
+ 
 }
