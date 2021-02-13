@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
-public class AK47 : NetworkBehaviour, IWeapon
+public class AK47 : MonoBehaviour, IWeapon
 {
     // Start is called before the first frame update
     public GameObject bulletPrefab;

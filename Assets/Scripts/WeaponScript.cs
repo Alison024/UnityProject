@@ -13,6 +13,7 @@ public class WeaponScript : NetworkBehaviour
     private GameObject bulletSpawnPosition;
     [SerializeField]
     private GameObject weapon;
+    //[SyncVar]
     [SerializeField]
     private GameObject weaponChild;
 
@@ -46,9 +47,9 @@ public class WeaponScript : NetworkBehaviour
         NetworkServer.Spawn(bullet);
         Destroy(bullet, 1.0f);
     }
+
     public void PickUpWeapon(GameObject weaponPrefab)
     {
-
         weaponChild = Instantiate(weaponPrefab, weapon.transform.position, weapon.transform.rotation);//Quaternion.identity
         weaponChild.transform.parent = weapon.transform;
         bulletSpawnPosition = weaponChild.transform.GetChild(1).gameObject;
