@@ -12,15 +12,15 @@ public class WeaponItem : NetworkBehaviour
         childrenWeapon = Instantiate(weaponPrefab,transform.position, Quaternion.identity);
         childrenWeapon.transform.parent = transform;
     }
-    /*private void OnTriggerEnter2D(Collider2D collision)
+    private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.tag == "Player")
         {
             WeaponScript script = (WeaponScript)collision.GetComponent("WeaponScript");
-            script.PickUpWeapon(weaponPrefab);
+            script.PickUpWeapon(EquippedWeapon.ak47);
             Destroy(transform.gameObject);
         }
-    }*/
+    }
 
  
 }

@@ -209,7 +209,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
-  speed: 0.4
+  speed: 0.2
   animator: {fileID: 0}
 --- !u!114 &4776708807099226543
 MonoBehaviour:
@@ -240,10 +240,7 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   bulletPrefab: {fileID: 3723024990032869157, guid: 455174023f4784f4683aaf65d860c244, type: 3}
-  bulletSpeed: 15
-  bulletSpawnPosition: {fileID: 0}
-  weapon: {fileID: 0}
-  weaponChild: {fileID: 0}
+  equippedWeaponPrefab: {fileID: 7336964571517366018, guid: 940e6e7cabecca7469da51fe25531088, type: 3}
 --- !u!61 &5472423833797857289
 BoxCollider2D:
   m_ObjectHideFlags: 0

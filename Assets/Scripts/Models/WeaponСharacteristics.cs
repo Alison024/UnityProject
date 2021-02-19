@@ -4,26 +4,22 @@ using UnityEngine;
 
 public class WeaponСharacteristics
 {
-    private GameObject bulletSpawnPositon;
+    
     private GameObject bulletPrefab;
     private float bulletSpeed;
     private float weight;
     private float fireRate;
     private float firingSpread;
-
-    public WeaponСharacteristics(GameObject BulletSpawnPostion, GameObject BulletPrefab, 
-        float Weight, float FireRate, float FiringSpread, float BulletSpeed)
+    private EquippedWeapon equippedWeapon;
+    public WeaponСharacteristics(GameObject BulletPrefab, 
+        float Weight, float FireRate, float FiringSpread, float BulletSpeed, EquippedWeapon equippedWeapon)
     {
-        this.bulletSpawnPositon = BulletSpawnPostion;
         this.bulletPrefab = BulletPrefab;
         this.weight = Weight;
         this.fireRate = FireRate;
         this.firingSpread = FiringSpread;
         this.bulletSpeed = BulletSpeed;
-    }
-    public GameObject GetBulletSpawnPostion()
-    {
-        return bulletSpawnPositon;
+        this.equippedWeapon = equippedWeapon;
     }
     public GameObject GetBulletPrefab()
     {
@@ -44,5 +40,9 @@ public class WeaponСharacteristics
     public float GetBulletSpeed()
     {
         return bulletSpeed;
+    }
+    public EquippedWeapon GetEquippedWeapon()
+    {
+        return equippedWeapon;
     }
 }
