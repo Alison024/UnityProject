@@ -76,8 +76,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e61860fb3a1e85f41a478e793488b456, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  syncMode: 0
-  syncInterval: 0.1
   bulletPrefab: {fileID: 3723024990032869157, guid: 455174023f4784f4683aaf65d860c244, type: 3}
 --- !u!61 &4413150538227308049
 BoxCollider2D:
