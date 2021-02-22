@@ -22,10 +22,17 @@ public class WeaponScript : NetworkBehaviour
     void Start()
     {
         weaponParent = transform.Find("Weapon").gameObject;
-        bulletSpeed = 15;
+        bulletSpeed = 30;
     }
     void Update()
     {
+        /*if (bulletSpawnPosition != null)
+        {
+            Vector3 positionOnScreenA = bulletSpawnPosition.transform.position;
+            Vector3 mouseOnScreenB = Camera.main.ScreenToViewportPoint(Input.mousePosition);
+            //Vector3 tmp = mouseOnScreenB - positionOnScreenA;
+            Debug.DrawRay(positionOnScreenA, mouseOnScreenB-positionOnScreenA, Color.red);
+        }*/
         if (weaponParent.transform.childCount == 0)
         {
             return;
@@ -40,6 +47,7 @@ public class WeaponScript : NetworkBehaviour
     {
         if(newEquippedWeapon == EquippedWeapon.ak47)
         {
+            
             equippedWeaponGo = Instantiate(equippedWeaponPrefab, weaponParent.transform.position, weaponParent.transform.rotation);
             equippedWeaponGo.transform.parent = weaponParent.transform;
             bulletSpawnPosition = equippedWeaponGo.transform.GetChild(1).gameObject;
@@ -48,6 +56,8 @@ public class WeaponScript : NetworkBehaviour
     [Command]
     void CmdBulletShoot()
     {
+        /*Vector3 positionOnScreenA = Camera.main.WorldToViewportPoint(bulletSpawnPosition.transform.position);
+        Vector3 mouseOnScreenB = (Vector3)Camera.main.ScreenToViewportPoint(Input.mousePosition);*/
         GameObject bullet = Instantiate(bulletPrefab, bulletSpawnPosition.transform.position, Quaternion.identity);
         bullet.GetComponent<Rigidbody2D>().velocity = bulletSpawnPosition.transform.right * bulletSpeed;
         NetworkServer.Spawn(bullet);
@@ -60,7 +70,6 @@ public class WeaponScript : NetworkBehaviour
         Debug.Log("PickUp_weapon = " + equipped);
         equippedWeapon = equipped;
         Debug.Log("PickUp_weapon = " + equippedWeapon);
-       
     }
-
+    
 }

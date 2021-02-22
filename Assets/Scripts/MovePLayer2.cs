@@ -8,12 +8,11 @@ public class MovePLayer2 : NetworkBehaviour
     // Start is called before the first frame update
 
     public float speed;
-
-    [SerializeField]
     private Animator animator;
     private SpriteRenderer spriteRenderer;
     private bool isBehindRun;
-
+    private Rigidbody2D rigidbody2D;
+    private Vector3 currentPosition;
     const string CALM = "calm";
     const string BEHIND_CALM = "behindCalm";
     const string BEHIND_RUN = "behindRun";
@@ -22,12 +21,12 @@ public class MovePLayer2 : NetworkBehaviour
 
     void Start()
     {
+        rigidbody2D = GetComponent<Rigidbody2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         animator = GetComponent<Animator>();
         isBehindRun = false;
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (!isLocalPlayer)
@@ -96,10 +95,19 @@ public class MovePLayer2 : NetworkBehaviour
             }
         }
 
-        Vector3 currentPosition = transform.position;
+        
+    }
+    void FixedUpdate()
+    {
+        if (!isLocalPlayer)
+        {
+            // exit from update if this is not the locssal player
+            return;
+        }
+        currentPosition = transform.position;
         currentPosition.x += Input.GetAxis("Horizontal") * speed;
         currentPosition.y += Input.GetAxis("Vertical") * speed;
-        transform.position = currentPosition;
+        rigidbody2D.MovePosition(currentPosition);
     }
 
     void ChangeAnimationState(string newState)

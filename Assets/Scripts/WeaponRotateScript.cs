@@ -28,7 +28,7 @@ public class WeaponRotateScript : NetworkBehaviour
         }
 
         //Get the Screen positions of the object
-        Vector2 positionOnScreen = Camera.main.WorldToViewportPoint(transform.position);
+        Vector2 positionOnScreen = Camera.main.WorldToViewportPoint(weapon.transform.position);
         //Get the Screen position of the mouse
         Vector2 mouseOnScreen = (Vector2)Camera.main.ScreenToViewportPoint(Input.mousePosition);
         //Get the angle between the points
