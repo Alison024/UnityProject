@@ -67,9 +67,7 @@ public class WeaponScript : NetworkBehaviour
     [Command]
     public void PickUpWeapon(EquippedWeapon equipped)
     {
-        Debug.Log("PickUp_weapon = " + equipped);
         equippedWeapon = equipped;
-        Debug.Log("PickUp_weapon = " + equippedWeapon);
     }
     
 }
