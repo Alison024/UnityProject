@@ -6,6 +6,7 @@ public class Bullet : NetworkBehaviour
 {
     // Start is called before the first frame update
     public float damage;
+    public uint playerId;
     private void Start()
     {
         if (damage == null)

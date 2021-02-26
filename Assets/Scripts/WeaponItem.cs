@@ -15,9 +15,8 @@ public class WeaponItem : NetworkBehaviour
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.tag == "Player")
-        {
-            WeaponScript script = (WeaponScript)collision.GetComponent("WeaponScript");
-            script.PickUpWeapon(EquippedWeapon.ak47);
+        { 
+            collision.gameObject.GetComponent<WeaponScript>().PickUpWeapon(EquippedWeapon.ak47);
             Destroy(transform.gameObject);
         }
     }

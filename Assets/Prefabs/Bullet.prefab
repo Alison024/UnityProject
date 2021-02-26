@@ -173,3 +173,4 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   damage: 5
+  playerId: 0

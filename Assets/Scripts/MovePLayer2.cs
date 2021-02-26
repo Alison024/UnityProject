@@ -97,6 +97,14 @@ public class MovePLayer2 : NetworkBehaviour
 
         
     }
+
+    public void OnCollisionEnter2D(Collision2D collision)
+    {
+        if(collision.transform.tag == "Player")
+        {
+            Physics2D.IgnoreCollision(collision.collider, GetComponent<CircleCollider2D>());
+        }
+    }
     void FixedUpdate()
     {
         if (!isLocalPlayer)
