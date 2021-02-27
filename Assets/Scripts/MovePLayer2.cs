@@ -7,28 +7,47 @@ public class MovePLayer2 : NetworkBehaviour
 {
     // Start is called before the first frame update
 
+    public bool isFlipX = true;
     public float speed;
+
     private Animator animator;
     private SpriteRenderer spriteRenderer;
     private bool isBehindRun;
     private Rigidbody2D rigidbody2D;
     private Vector3 currentPosition;
+    private WeaponScript weaponScript;
+    private PlayerHealth healthBarScript;
+
     const string CALM = "calm";
     const string BEHIND_CALM = "behindCalm";
     const string BEHIND_RUN = "behindRun";
     const string SIDE_WAY_RUN = "sideWayRun";
     const string IN_FRON_RUN = "inFronRun";
 
+    
     void Start()
     {
         rigidbody2D = GetComponent<Rigidbody2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         animator = GetComponent<Animator>();
+        weaponScript = GetComponent<WeaponScript>();
+        healthBarScript = GetComponent<PlayerHealth>();
         isBehindRun = false;
     }
 
     void Update()
     {
+        Vector2 positionOnScreen = Camera.main.WorldToViewportPoint(transform.position);
+        Vector2 mouseOnScreen = (Vector2)Camera.main.ScreenToViewportPoint(Input.mousePosition);
+        if ((positionOnScreen - mouseOnScreen).x < 0)
+        {
+            weaponScript.FlipYWeapon(false);
+        }
+        else
+        {
+            weaponScript.FlipYWeapon(true);
+        }
+
         if (!isLocalPlayer)
         {
             // exit from update if this is not the local player
@@ -40,37 +59,37 @@ public class MovePLayer2 : NetworkBehaviour
         if (horizontal < 0 && vertical == 0)//move left
         {
             isBehindRun = false;
-            spriteRenderer.flipX = true;
+            spriteRenderer.flipX = isFlipX;
             ChangeAnimationState(SIDE_WAY_RUN);
         }
         else if (horizontal > 0 && vertical == 0)//move right
         {
             isBehindRun = false;
-            spriteRenderer.flipX = false;
+            spriteRenderer.flipX = !isFlipX;
             ChangeAnimationState(SIDE_WAY_RUN);
         }
         else if (horizontal < 0 && vertical > 0)//move left up
         {
             isBehindRun = false;
-            spriteRenderer.flipX = true;
+            spriteRenderer.flipX = isFlipX;
             ChangeAnimationState(SIDE_WAY_RUN);
         }
         else if (horizontal < 0 && vertical < 0)//move left down
         {
             isBehindRun = false;
-            spriteRenderer.flipX = true;
+            spriteRenderer.flipX = isFlipX;
             ChangeAnimationState(SIDE_WAY_RUN);
         }
         else if (horizontal > 0 && vertical > 0)//move right up
         {
             isBehindRun = false;
-            spriteRenderer.flipX = false;
+            spriteRenderer.flipX = !isFlipX;
             ChangeAnimationState(SIDE_WAY_RUN);
         }
         else if (horizontal > 0 && vertical < 0)//move right down
         {
             isBehindRun = false;
-            spriteRenderer.flipX = false;
+            spriteRenderer.flipX = !isFlipX;
             ChangeAnimationState(SIDE_WAY_RUN);
         }
         else if (horizontal == 0 && vertical > 0)//move up
@@ -94,7 +113,7 @@ public class MovePLayer2 : NetworkBehaviour
                 ChangeAnimationState(CALM);
             }
         }
-
+        
         
     }
 
@@ -118,7 +137,7 @@ public class MovePLayer2 : NetworkBehaviour
         rigidbody2D.MovePosition(currentPosition);
     }
 
-    void ChangeAnimationState(string newState)
+    private void ChangeAnimationState(string newState)
     {
         animator.Play(newState);
     }

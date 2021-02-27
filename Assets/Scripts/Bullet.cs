@@ -20,5 +20,14 @@ public class Bullet : NetworkBehaviour
         {
             NetworkServer.Destroy(gameObject);
         }
+        //попытка исправить баг с отображением пуль на стороне клиента
+        /*if(collision.tag == "Player")
+        {
+            if(collision.GetComponent<NetworkIdentity>().netId == playerId)
+            {
+                Physics2D.IgnoreCollision(collision.GetComponent<BoxCollider2D>(), GetComponent<CircleCollider2D>());
+            }
+        }*/
+        //не получилось
     }
 }

@@ -16,6 +16,7 @@ public class PlayerHealth : NetworkBehaviour
     private void OnHealthChange(float oldHealth, float newHealth)
     {
         healthValue.transform.localScale = new Vector3((float)(currentHealth / maxHealth),1,1);
+       
     }
     // Update is called once per frame
     void Update()
@@ -29,6 +30,7 @@ public class PlayerHealth : NetworkBehaviour
     {
         if (collision.tag == "Bullet")
         {
+            currentHealth -= collision.GetComponent<Bullet>().damage;
             if (collision.GetComponent<Bullet>().playerId != netId)
             {
                 currentHealth -= collision.GetComponent<Bullet>().damage;
@@ -37,4 +39,5 @@ public class PlayerHealth : NetworkBehaviour
             }
         }
     }
+   
 }
