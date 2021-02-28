@@ -10,8 +10,10 @@ public enum EquippedWeapon : int
 }
 public class WeaponScript : NetworkBehaviour
 {
-
+    
     public GameObject bulletPrefab;
+    public Camera camera;
+
     private float bulletSpeed;
     private GameObject bulletSpawnPositionRight;
     private GameObject weaponParentRight;
@@ -25,6 +27,7 @@ public class WeaponScript : NetworkBehaviour
     void Start()
     {
         weaponParentRight = transform.Find("WeaponRight").gameObject;
+        //camera = GetComponent<Camera>();
         bulletSpeed = 10;
     }
     void Update()
@@ -81,22 +84,25 @@ public class WeaponScript : NetworkBehaviour
         {
             return;
         }
-        Vector2 positionOnScreen = Camera.main.WorldToViewportPoint(weaponParentRight.transform.position);
-        Vector2 mouseOnScreen = (Vector2)Camera.main.ScreenToViewportPoint(Input.mousePosition);
+        Vector2 positionOnScreen = weaponParentRight.transform.position;
+        Vector2 mouseOnScreen = camera.ScreenToWorldPoint(Input.mousePosition);
+        //Vector2 lookDir = mouseOnScreen - positionOnScreen;
+        //float angle = Mathf.Atan2(lookDir.y, lookDir.x) * Mathf.Rad2Deg;//v1
         float angle = AngleBetweenTwoPoints(positionOnScreen, mouseOnScreen);
         weaponParentRight.transform.rotation = Quaternion.Euler(new Vector3(0f, 0f, angle));
+        
+        if ((positionOnScreen - mouseOnScreen).x < 0)
+        {
+            weaponSpriteRenderer.flipY = false;
+        }
+        else
+        {
+            weaponSpriteRenderer.flipY = true;
+        }
     }
     private float AngleBetweenTwoPoints(Vector3 a, Vector3 b)
     {
         return Mathf.Atan2(b.y - a.y, b.x - a.x) * Mathf.Rad2Deg;
     }
     
-    public void FlipYWeapon(bool isFlipY)
-    {
-        isFlipWeaponY = isFlipY;
-        if (weaponSpriteRenderer != null)
-        {
-            weaponSpriteRenderer.flipY = isFlipWeaponY;
-        }
-    }
 }

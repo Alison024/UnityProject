@@ -37,16 +37,7 @@ public class MovePLayer2 : NetworkBehaviour
 
     void Update()
     {
-        Vector2 positionOnScreen = Camera.main.WorldToViewportPoint(transform.position);
-        Vector2 mouseOnScreen = (Vector2)Camera.main.ScreenToViewportPoint(Input.mousePosition);
-        if ((positionOnScreen - mouseOnScreen).x < 0)
-        {
-            weaponScript.FlipYWeapon(false);
-        }
-        else
-        {
-            weaponScript.FlipYWeapon(true);
-        }
+       
 
         if (!isLocalPlayer)
         {
