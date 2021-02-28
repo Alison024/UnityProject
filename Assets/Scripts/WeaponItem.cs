@@ -16,8 +16,8 @@ public class WeaponItem : NetworkBehaviour
     {
         if (collision.tag == "Player")
         { 
-            collision.gameObject.GetComponent<WeaponScript>().PickUpWeapon(EquippedWeapon.ak47);
-            Destroy(transform.gameObject);
+            collision.gameObject.GetComponent<WeaponScript>().CmdPickUpWeapon(EquippedWeapon.ak47);
+            NetworkServer.Destroy(transform.gameObject);
         }
     }
 

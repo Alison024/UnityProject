@@ -30,12 +30,11 @@ public class PlayerHealth : NetworkBehaviour
     {
         if (collision.tag == "Bullet")
         {
-            currentHealth -= collision.GetComponent<Bullet>().damage;
+            
             if (collision.GetComponent<Bullet>().playerId != netId)
             {
                 currentHealth -= collision.GetComponent<Bullet>().damage;
-                //NetworkServer.Destroy(collision.gameObject);
-                Destroy(collision.gameObject);
+                NetworkServer.Destroy(collision.gameObject);
             }
         }
     }

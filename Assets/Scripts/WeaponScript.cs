@@ -26,13 +26,15 @@ public class WeaponScript : NetworkBehaviour
     private bool isFlipWeaponY = false;
     void Start()
     {
-        weaponParentRight = transform.Find("WeaponRight").gameObject;
-        //camera = GetComponent<Camera>();
+        weaponParentRight = transform.Find("WeaponRight").gameObject;    
         bulletSpeed = 10;
     }
     void Update()
-    { 
-        
+    {
+        if (!isLocalPlayer)
+        {
+            return;
+        }
         if (weaponParentRight.transform.childCount == 0)
         {
             return;
@@ -55,26 +57,17 @@ public class WeaponScript : NetworkBehaviour
 
         }
     }
-    /*private void OnFlipWeapon(bool oldVal, bool newVal)
-    {
-        if (weaponSpriteRenderer != null)
-        {
-            weaponSpriteRenderer.flipY = isFlipWeaponY;
-        }
-    }*/
     [Command]
     void CmdBulletShoot()
     {
         GameObject bullet = Instantiate(bulletPrefab, bulletSpawnPositionRight.transform.position, Quaternion.identity);
         bullet.GetComponent<Bullet>().playerId = netId;
         bullet.GetComponent<Rigidbody2D>().velocity = bulletSpawnPositionRight.transform.right * bulletSpeed;
-        //Ignore collisions with player-creator ... still doesn't work 
-        //Physics2D.IgnoreCollision(bullet.GetComponent<CircleCollider2D>(), GetComponent<BoxCollider2D>());
         NetworkServer.Spawn(bullet);
         Destroy(bullet, 5.0f);
     }
     [Command]
-    public void PickUpWeapon(EquippedWeapon equipped)
+    public void CmdPickUpWeapon(EquippedWeapon equipped)
     {
         equippedWeapon = equipped;
     }
@@ -86,8 +79,6 @@ public class WeaponScript : NetworkBehaviour
         }
         Vector2 positionOnScreen = weaponParentRight.transform.position;
         Vector2 mouseOnScreen = camera.ScreenToWorldPoint(Input.mousePosition);
-        //Vector2 lookDir = mouseOnScreen - positionOnScreen;
-        //float angle = Mathf.Atan2(lookDir.y, lookDir.x) * Mathf.Rad2Deg;//v1
         float angle = AngleBetweenTwoPoints(positionOnScreen, mouseOnScreen);
         weaponParentRight.transform.rotation = Quaternion.Euler(new Vector3(0f, 0f, angle));
         
