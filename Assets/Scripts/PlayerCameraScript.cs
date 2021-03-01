@@ -4,27 +4,25 @@ using UnityEngine;
 using Mirror;
 public class PlayerCameraScript : NetworkBehaviour
 {
-    public Camera camera;
+    private GameObject cameraSlot;
+    //public Camera camera;
     void Start()
-    {
-        camera = GetComponent<Camera>();
-        UpdateCameraState();
-    }
-
-    // Update is called once per frame
-    void Update()
     {
         if (isLocalPlayer)
         {
-            if (camera.enabled == false)
-            {
-                UpdateCameraState();
-            }
+            cameraSlot = transform.Find("CameraSlot").gameObject;
+            Transform cameraTransform = Camera.main.gameObject.transform;
+            cameraTransform.parent = cameraSlot.transform;
+            cameraTransform.position = cameraSlot.transform.position;
+            cameraTransform.rotation = cameraSlot.transform.rotation;
+            Camera.main.orthographicSize = 6;
+            Debug.Log("MainCameraChange");
         }
     }
-    private void UpdateCameraState()
+
+    void Update()
     {
-        Camera.main.enabled = false;
-        camera.enabled = true;
+        
     }
+    
 }

@@ -28,6 +28,10 @@ public class WeaponScript : NetworkBehaviour
     {
         weaponParentRight = transform.Find("WeaponRight").gameObject;    
         bulletSpeed = 10;
+        if (camera == null)
+        {
+            camera = Camera.main;
+        }
     }
     void Update()
     {
