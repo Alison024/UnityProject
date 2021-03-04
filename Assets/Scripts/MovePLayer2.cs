@@ -5,8 +5,6 @@ using Mirror;
 
 public class MovePLayer2 : NetworkBehaviour
 {
-    // Start is called before the first frame update
-
     public bool isFlipX = true;
     public float speed;
 
@@ -15,14 +13,12 @@ public class MovePLayer2 : NetworkBehaviour
     private bool isBehindRun;
     private Rigidbody2D rigidbody2D;
     private Vector3 currentPosition;
-    private WeaponScript weaponScript;
-    private PlayerHealth healthBarScript;
 
     const string CALM = "calm";
     const string BEHIND_CALM = "behindCalm";
     const string BEHIND_RUN = "behindRun";
     const string SIDE_WAY_RUN = "sideWayRun";
-    const string IN_FRON_RUN = "inFronRun";
+    const string IN_FRON_RUN = "inFromRun";
 
     
     void Start()
@@ -30,8 +26,6 @@ public class MovePLayer2 : NetworkBehaviour
         rigidbody2D = GetComponent<Rigidbody2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         animator = GetComponent<Animator>();
-        weaponScript = GetComponent<WeaponScript>();
-        healthBarScript = GetComponent<PlayerHealth>();
         isBehindRun = false;
     }
 

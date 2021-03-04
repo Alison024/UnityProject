@@ -10,15 +10,19 @@ public class WeaponСharacteristics
     private float weight;
     private float fireRate;
     private float firingSpread;
+    private int magazine;
+    private float reloadTime;
     private EquippedWeapon equippedWeapon;
     public WeaponСharacteristics(GameObject BulletPrefab, 
-        float Weight, float FireRate, float FiringSpread, float BulletSpeed, EquippedWeapon equippedWeapon)
+        float Weight, float FireRate, float FiringSpread, float BulletSpeed, int Magazine, float ReloadTime, EquippedWeapon equippedWeapon)
     {
         this.bulletPrefab = BulletPrefab;
         this.weight = Weight;
         this.fireRate = FireRate;
         this.firingSpread = FiringSpread;
         this.bulletSpeed = BulletSpeed;
+        this.magazine = Magazine;
+        this.reloadTime = ReloadTime;
         this.equippedWeapon = equippedWeapon;
     }
     public GameObject GetBulletPrefab()
@@ -40,6 +44,14 @@ public class WeaponСharacteristics
     public float GetBulletSpeed()
     {
         return bulletSpeed;
+    }
+    public int GetMagazineAmo()
+    {
+        return magazine;
+    }
+    public float GetReloadSpeed()
+    {
+        return reloadTime;
     }
     public EquippedWeapon GetEquippedWeapon()
     {

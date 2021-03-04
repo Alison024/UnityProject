@@ -9,10 +9,11 @@ public class Bullet : NetworkBehaviour
     public uint playerId;
     private void Start()
     {
-        if (damage == null)
+        /*if (damage == null)
         {
             damage = 10;
-        }
+        }*/
+        damage = 10;
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -20,14 +21,6 @@ public class Bullet : NetworkBehaviour
         {
             NetworkServer.Destroy(gameObject);
         }
-        //попытка исправить баг с отображением пуль на стороне клиента
-        /*if(collision.tag == "Player")
-        {
-            if(collision.GetComponent<NetworkIdentity>().netId == playerId)
-            {
-                Physics2D.IgnoreCollision(collision.GetComponent<BoxCollider2D>(), GetComponent<CircleCollider2D>());
-            }
-        }*/
-        //не получилось
+        
     }
 }

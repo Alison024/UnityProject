@@ -16,10 +16,17 @@ public class PlayerCameraScript : NetworkBehaviour
             cameraTransform.position = cameraSlot.transform.position;
             cameraTransform.rotation = cameraSlot.transform.rotation;
             Camera.main.orthographicSize = 6;
-            Debug.Log("MainCameraChange");
         }
     }
-
+    public override void OnStopClient()
+    {
+        base.OnStopClient();
+        Transform cameraTransform = Camera.main.gameObject.transform;
+        cameraTransform.parent = null;
+        cameraTransform.position = new Vector3(0,0,0);
+        cameraTransform.rotation = Quaternion.Euler(new Vector3(0, 0, 0));
+        Camera.main.orthographicSize = 20;
+    }
     void Update()
     {
         

@@ -188,7 +188,7 @@ GameObject:
   - component: {fileID: 6853980353078886292}
   - component: {fileID: 6169873369246081713}
   - component: {fileID: 2307100497140828189}
-  - component: {fileID: 5981175312703785877}
+  - component: {fileID: 5195527686303653335}
   - component: {fileID: 6853980353078886295}
   - component: {fileID: 1878545939413934113}
   - component: {fileID: 4993062402077115549}
@@ -304,6 +304,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sceneId: 0
   serverOnly: 0
+  visible: 0
   m_AssetId: 
   hasSpawned: 0
 --- !u!114 &6169873369246081713
@@ -343,7 +344,7 @@ MonoBehaviour:
   localRotationSensitivity: 0.01
   localScaleSensitivity: 0.01
   target: {fileID: 5127076286186052211}
---- !u!114 &5981175312703785877
+--- !u!114 &5195527686303653335
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -390,7 +391,6 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   bulletPrefab: {fileID: 3723024990032869157, guid: 455174023f4784f4683aaf65d860c244, type: 3}
-  camera: {fileID: 0}
   equippedWeaponPrefab: {fileID: 7336964571517366018, guid: 940e6e7cabecca7469da51fe25531088, type: 3}
 --- !u!114 &4993062402077115549
 MonoBehaviour:

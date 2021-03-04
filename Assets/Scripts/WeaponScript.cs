@@ -1,9 +1,10 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
 
-public enum EquippedWeapon : int
+public enum EquippedWeapon : byte
 {
     nothing,
     ak47
@@ -12,68 +13,107 @@ public class WeaponScript : NetworkBehaviour
 {
     
     public GameObject bulletPrefab;
-    public Camera camera;
+    public GameObject equippedWeaponPrefab;
 
     private float bulletSpeed;
-    private GameObject bulletSpawnPositionRight;
-    private GameObject weaponParentRight;
-    public GameObject equippedWeaponPrefab;
+    private float fireRate;
+    private float lastFire;
+    private float firingSpread;
+    private int magazine;
+    private int currentMagazine;
+    private float reloadTime;
+    private bool isReloading;
+
+    private GameObject bulletSpawnPosition;
+    private GameObject weaponParent;
     private SpriteRenderer weaponSpriteRenderer;
-    private GameObject equippedWeaponRightGo;//Go = gameobject
+    private GameObject equippedWeaponGo;
+
     [SyncVar(hook = nameof(OnChangeWeapon))]
     private EquippedWeapon equippedWeapon = EquippedWeapon.nothing;
-    //[SyncVar(hook = nameof(OnFlipWeapon))]
     private bool isFlipWeaponY = false;
+
     void Start()
     {
-        weaponParentRight = transform.Find("WeaponRight").gameObject;    
-        bulletSpeed = 10;
-        if (camera == null)
-        {
-            camera = Camera.main;
-        }
+        bulletSpeed = 15;
+        fireRate = 600;
+        firingSpread = 10;
+        magazine = 20;
+        reloadTime = 2;
+        isReloading = false;
+        lastFire = 0;
+        currentMagazine = magazine;
+        weaponParent = transform.Find("WeaponRight").gameObject;
     }
+
     void Update()
     {
         if (!isLocalPlayer)
         {
             return;
         }
-        if (weaponParentRight.transform.childCount == 0)
+        if (weaponParent.transform.childCount != 0)
         {
-            return;
+            Fire();
+            RotateWeapon();
         }
-        if (this.isLocalPlayer && Input.GetMouseButtonDown(0))
-        {
-            this.CmdBulletShoot();
-        }
-        RotateWeapon();
+        
     }
-    private void OnChangeWeapon(EquippedWeapon oldEquippedWeapon, EquippedWeapon newEquippedWeapon)
+    void OnChangeWeapon(EquippedWeapon oldEquippedWeapon, EquippedWeapon newEquippedWeapon)
     {
-        Vector3 weaponPos = weaponParentRight.transform.position;
-        if (newEquippedWeapon == EquippedWeapon.ak47)
+        if (newEquippedWeapon == EquippedWeapon.ak47 && weaponParent!=null)
         {
-            equippedWeaponRightGo = Instantiate(equippedWeaponPrefab, new Vector3(weaponPos.x + 0.9f, weaponPos.y, weaponPos.z), weaponParentRight.transform.rotation);
-            equippedWeaponRightGo.transform.parent = weaponParentRight.transform;
-            weaponSpriteRenderer = equippedWeaponRightGo.transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>();
-            bulletSpawnPositionRight = equippedWeaponRightGo.transform.GetChild(1).gameObject;
-
+            Vector3 weaponPos = weaponParent.transform.position;
+            equippedWeaponGo = Instantiate(equippedWeaponPrefab, 
+                new Vector3(weaponParent.transform.position.x + 0.9f, weaponParent.transform.position.y, weaponParent.transform.position.z),
+                weaponParent.transform.rotation);
+            equippedWeaponGo.transform.parent = weaponParent.transform;
+            weaponSpriteRenderer = equippedWeaponGo.transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>();
+            bulletSpawnPosition = equippedWeaponGo.transform.GetChild(1).gameObject;
         }
     }
+   
     [Command]
-    void CmdBulletShoot()
+    void CmdFire()
     {
-        GameObject bullet = Instantiate(bulletPrefab, bulletSpawnPositionRight.transform.position, Quaternion.identity);
-        bullet.GetComponent<Bullet>().playerId = netId;
-        bullet.GetComponent<Rigidbody2D>().velocity = bulletSpawnPositionRight.transform.right * bulletSpeed;
-        NetworkServer.Spawn(bullet);
-        Destroy(bullet, 5.0f);
+        CreateBullet();
     }
+    
+    private void CreateBullet()
+    {
+        try{
+            GameObject bullet = Instantiate(bulletPrefab, bulletSpawnPosition.transform.position, Quaternion.identity);
+            bullet.GetComponent<Bullet>().playerId = netId;
+            bullet.GetComponent<Rigidbody2D>().velocity = bulletSpawnPosition.transform.right * bulletSpeed;
+            NetworkServer.Spawn(bullet);
+            Destroy(bullet, 5.0f);
+        }catch(Exception ex){
+            if(bulletPrefab == null)
+            {
+                Debug.Log("Bullet prefab = null");
+                Debug.Log("Bullet: " + ex.Message);
+            }
+            else if (bulletSpawnPosition == null)
+            {
+                Debug.Log("Bullet Spawn Position = null");
+                Debug.Log("Bullet: " + ex.Message);
+            }
+            else Debug.Log("Bullet: "+ex.Message);
+        }
+    }
+
     [Command]
     public void CmdPickUpWeapon(EquippedWeapon equipped)
     {
         equippedWeapon = equipped;
+    }
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.tag == "WeaponItem")//isLocalPlayer
+        {
+            EquippedWeapon equippedWeaponValue = collision.GetComponent<WeaponItem>().equippedWeapon;
+            CmdPickUpWeapon(equippedWeaponValue);
+        }
     }
     private void RotateWeapon()
     {
@@ -81,10 +121,10 @@ public class WeaponScript : NetworkBehaviour
         {
             return;
         }
-        Vector2 positionOnScreen = weaponParentRight.transform.position;
-        Vector2 mouseOnScreen = camera.ScreenToWorldPoint(Input.mousePosition);
+        Vector2 positionOnScreen = weaponParent.transform.position;
+        Vector2 mouseOnScreen = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         float angle = AngleBetweenTwoPoints(positionOnScreen, mouseOnScreen);
-        weaponParentRight.transform.rotation = Quaternion.Euler(new Vector3(0f, 0f, angle));
+        weaponParent.transform.rotation = Quaternion.Euler(new Vector3(0f, 0f, angle));
         
         if ((positionOnScreen - mouseOnScreen).x < 0)
         {
@@ -100,4 +140,30 @@ public class WeaponScript : NetworkBehaviour
         return Mathf.Atan2(b.y - a.y, b.x - a.x) * Mathf.Rad2Deg;
     }
     
+    private void StartReloading()
+    {
+        isReloading = true;
+        Invoke("EndReloading", reloadTime);
+    }
+    private void EndReloading()
+    {
+        isReloading = false;
+        currentMagazine = magazine;
+    }
+    private void Fire()
+    {
+        if (Input.GetMouseButton(0) && !isReloading)
+        {
+            if (currentMagazine == 0)
+            {
+                StartReloading();
+            }
+            else if ((Time.time - lastFire) > (60 / fireRate))
+            {
+                lastFire = Time.time;
+                CmdFire();
+                currentMagazine--;
+            }
+        }
+    }
 }
