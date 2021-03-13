@@ -88,17 +88,7 @@ public class WeaponScript : NetworkBehaviour
             NetworkServer.Spawn(bullet);
             Destroy(bullet, 5.0f);
         }catch(Exception ex){
-            if(bulletPrefab == null)
-            {
-                Debug.Log("Bullet prefab = null");
-                Debug.Log("Bullet: " + ex.Message);
-            }
-            else if (bulletSpawnPosition == null)
-            {
-                Debug.Log("Bullet Spawn Position = null");
-                Debug.Log("Bullet: " + ex.Message);
-            }
-            else Debug.Log("Bullet: "+ex.Message);
+            Debug.Log("Bullet: "+ex.Message);
         }
     }
 
@@ -109,7 +99,7 @@ public class WeaponScript : NetworkBehaviour
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.tag == "WeaponItem")//isLocalPlayer
+        if (collision.tag == "WeaponItem")
         {
             EquippedWeapon equippedWeaponValue = collision.GetComponent<WeaponItem>().equippedWeapon;
             CmdPickUpWeapon(equippedWeaponValue);
