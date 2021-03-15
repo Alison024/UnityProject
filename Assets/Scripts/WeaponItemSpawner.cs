@@ -21,16 +21,6 @@ public class WeaponItemSpawner : NetworkBehaviour
         }
         SpawnXItems(5);
     }
-    /*void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }*/
     public void SpawnXItems(int x)
     {
         for (int i = 0; i < x; i++)
