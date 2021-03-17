@@ -2,12 +2,19 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
+using UnityEngine.SceneManagement;
 public class CustomNetworkManager : NetworkManager
 {
-    NetworkConnection conn;
-    public override void OnClientConnect(NetworkConnection conn)
+    public GameObject weaponItemSpawnerPrefab;
+    private GameObject weaponItemSpawner;
+    
+    private void Update()
     {
-        base.OnClientConnect(conn);
-        //this.conn.
+        if(SceneManager.GetActiveScene().name=="Game" && weaponItemSpawner == null && SceneManager.GetActiveScene().isLoaded)
+        {
+            weaponItemSpawner = Instantiate(weaponItemSpawnerPrefab);
+            NetworkServer.Spawn(weaponItemSpawner);
+        }
     }
+
 }

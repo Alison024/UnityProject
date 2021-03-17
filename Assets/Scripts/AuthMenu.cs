@@ -7,8 +7,5 @@ public class AuthMenu : MonoBehaviour
 {
     public GameObject loginInput;
     public GameObject passwordInput;
-    public void PlayGame()
-    {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
-    }
+    
 }

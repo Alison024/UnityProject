@@ -4,11 +4,9 @@ using UnityEngine;
 using Mirror;
 public class WeaponItem : NetworkBehaviour
 {
-    public WeaponItemSpawner weaponItemSpawner;
     public EquippedWeapon equippedWeapon;
     public GameObject weaponPrefab;
     private GameObject childrenWeapon;
-
     void Start()
     {
         childrenWeapon = Instantiate(weaponPrefab,transform.position, Quaternion.identity);
@@ -21,15 +19,12 @@ public class WeaponItem : NetworkBehaviour
     {
         if (collision.tag == "Player")
         {
-            
             Destroy(transform.gameObject);
         }
     }
     private void Destroy()
     { 
-        weaponItemSpawner.weaponItems--;
         Destroy(transform.gameObject);
-        
     }
  
 }

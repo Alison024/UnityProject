@@ -1,38 +1,51 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using Mirror;
 public class WeaponItemSpawner : NetworkBehaviour
 {
     private System.Random rnd;
-    public GameObject weaponItemSpawnPositions;
+    private GameObject weaponItemSpawnPositions;
     private List<GameObject> weaponItemSpawnPositionsList;
     public GameObject weaponItemPrefab;
-    public int weaponItems;
+    public GameObject weaponParentItems;
 
-    public override void OnStartServer()
+    private void Start()
     {
-        base.OnStartServer();
-        weaponItems = 0;
+        if (!isServer)
+            return;
         rnd = new System.Random();
         weaponItemSpawnPositionsList = new List<GameObject>();
-        for (int i = 0; i < weaponItemSpawnPositions.transform.childCount; i++)
-        {
-            weaponItemSpawnPositionsList.Add(weaponItemSpawnPositions.transform.GetChild(i).gameObject);
-        }
-        SpawnXItems(5);
     }
-    public void SpawnXItems(int x)
+    private void Update()
     {
-        for (int i = 0; i < x; i++)
+        if (!isServer)
+            return;
+
+        if (GameObject.Find("WeaponSpawnPositions") != null)
         {
-            int spawnPointIndex = rnd.Next(0, weaponItemSpawnPositionsList.Count - 1);
-            Transform transformSpawn = weaponItemSpawnPositionsList[spawnPointIndex].transform;
-            GameObject newWeaponItem = Instantiate(weaponItemPrefab, transformSpawn);
-            newWeaponItem.transform.parent = null;
-            newWeaponItem.GetComponent<WeaponItem>().weaponItemSpawner = this;
-            weaponItems++;
-            NetworkServer.Spawn(newWeaponItem);
+            weaponItemSpawnPositions = GameObject.Find("WeaponSpawnPositions");
+            for (int i = 0; i < weaponItemSpawnPositions.transform.childCount; i++)
+            {
+                weaponItemSpawnPositionsList.Add(weaponItemSpawnPositions.transform.GetChild(i).gameObject);
+            }
         }
+        if (GameObject.Find("WeaponParentItems") != null)
+        {
+            weaponParentItems = GameObject.Find("WeaponParentItems");
+        }
+        if (weaponParentItems!=null && weaponParentItems.transform.childCount < 5)
+        {
+            CmdSpawnXItems();
+        }
+    }
+    public void CmdSpawnXItems()
+    {
+        int spawnPointIndex = rnd.Next(0, weaponItemSpawnPositionsList.Count - 1);
+        Transform transformSpawn = weaponItemSpawnPositionsList[spawnPointIndex].transform;
+        GameObject newWeaponItem = Instantiate(weaponItemPrefab, transformSpawn);
+        newWeaponItem.transform.parent = weaponParentItems.transform;
+        NetworkServer.Spawn(newWeaponItem);
     }
     
 }
