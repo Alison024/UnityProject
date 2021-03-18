@@ -20,7 +20,6 @@ public class MovePLayer2 : NetworkBehaviour
     const string SIDE_WAY_RUN = "sideWayRun";
     const string IN_FRON_RUN = "inFromRun";
 
-    
     void Start()
     {
         rigidbody2D = GetComponent<Rigidbody2D>();
@@ -38,6 +37,7 @@ public class MovePLayer2 : NetworkBehaviour
             // exit from update if this is not the local player
             return;
         }
+
         double horizontal = Input.GetAxis("Horizontal");
         double vertical = Input.GetAxis("Vertical");
         
@@ -98,10 +98,15 @@ public class MovePLayer2 : NetworkBehaviour
                 ChangeAnimationState(CALM);
             }
         }
-        
-        
-    }
 
+        //CmdDebugLog();
+    }
+    /*[Command]
+    void CmdDebugLog()
+    {
+        Debug.Log(connectionToClient.authenticationData.ToString());
+        Debug.Log("Net id = "+netId);
+    }*/
     public void OnCollisionEnter2D(Collision2D collision)
     {
         if(collision.transform.tag == "Player")

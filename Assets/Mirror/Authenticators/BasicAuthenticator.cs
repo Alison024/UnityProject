@@ -3,6 +3,15 @@ using UnityEngine;
 
 namespace Mirror.Authenticators
 {
+    /*public class UserData
+    {
+        public string Name;
+        public string Password;
+        public override string ToString()
+        {
+            return Name + " " + Password;
+        }
+    }*/
     [AddComponentMenu("Network/Authenticators/BasicAuthenticator")]
     public class BasicAuthenticator : NetworkAuthenticator
     {
@@ -81,7 +90,7 @@ namespace Mirror.Authenticators
                 };
 
                 conn.Send(authResponseMessage);
-
+                //conn.authenticationData = new UserData { Name = username, Password = password};
                 // Accept the successful authentication
                 ServerAccept(conn);
             }
@@ -147,7 +156,7 @@ namespace Mirror.Authenticators
                 authUsername = username,
                 authPassword = password
             };
-
+            
             conn.Send(authRequestMessage);
         }
 

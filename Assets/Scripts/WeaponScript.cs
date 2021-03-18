@@ -85,7 +85,7 @@ public class WeaponScript : NetworkBehaviour
             GameObject bullet = Instantiate(bulletPrefab, bulletSpawnPosition.transform.position, Quaternion.identity);
             bullet.GetComponent<Bullet>().playerId = netId;
             bullet.GetComponent<Rigidbody2D>().velocity = bulletSpawnPosition.transform.right * bulletSpeed;
-            NetworkServer.Spawn(bullet);
+            NetworkServer.Spawn(bullet,connectionToClient);
             Destroy(bullet, 5.0f);
         }catch(Exception ex){
             Debug.Log("Bullet: "+ex.Message);
