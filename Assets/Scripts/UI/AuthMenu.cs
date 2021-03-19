@@ -57,9 +57,9 @@ public class AuthMenu : MonoBehaviour
                 PlayerInfo = playerInfo
             };
             GameObject.Find("PlayerAuthenticator").GetComponent<PlayerDataStore>().isAuthorize = true;
-            GameObject.Find("PlayerAuthenticator").GetComponent<PlayerDataStore>().playerData = playerData;
             this.gameObject.SetActive(false);
             profileMenu.SetActive(true);
+            GameObject.Find("PlayerAuthenticator").GetComponent<PlayerDataStore>().PlayerData = playerData;
         }
     }
     

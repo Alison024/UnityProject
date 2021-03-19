@@ -5,9 +5,10 @@ using Mirror;
 using Mirror.Authenticators;
 public class CustomAuthenticator : NetworkAuthenticator
 {
-    public int PlayerId { get; set; }
+    public PlayerData playerData;
+    /*public int PlayerId { get; set; }
     public string PlayerNickName { get; set; }
-    public string PlayerLogin { get; set; }
+    public string PlayerLogin { get; set; }*/
 
     public struct AuthRequestMessage : NetworkMessage
     {
@@ -41,11 +42,11 @@ public class CustomAuthenticator : NetworkAuthenticator
             };
 
             conn.Send(authResponseMessage);
-            PlayerData playerData = new PlayerData { 
+            /*PlayerData playerData = new PlayerData { 
                 PlayerId = PlayerId, 
                 PlayerLogin = PlayerLogin, 
                 PlayerNickName = PlayerNickName
-            };
+            };*/
 
             conn.authenticationData = playerData;
             // Accept the successful authentication
