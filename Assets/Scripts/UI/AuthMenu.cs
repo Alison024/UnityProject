@@ -6,8 +6,10 @@ using UnityEngine.SceneManagement;
 using UnityEngine.Networking;
 using System.Text;
 using SimpleJSON;
+using Newtonsoft;
 public class AuthMenu : MonoBehaviour
 {
+    public GameObject profileMenu;
     public GameObject loginInput;
     public GameObject passwordInput;
     public PlayerData playerData;
@@ -16,36 +18,11 @@ public class AuthMenu : MonoBehaviour
     {
         string login = loginInput.GetComponent<InputField>().text;
         string password = passwordInput.GetComponent<InputField>().text;
-        string json = "{\"Login\":" + "\"" + login + "\",\"Password\":" + "\"" + password + "\"}";
+        AuthPlayer authPlayer = new AuthPlayer { Login = login, Password = password };
+        string json = Newtonsoft.Json.JsonConvert.SerializeObject(authPlayer);
         StartCoroutine(Post(URL, json));
     }
-    /*public IEnumerator AuthenticatePlayer()
-    {
-        string login = loginInput.GetComponent<InputField>().text;
-        string password = passwordInput.GetComponent<InputField>().text;
-        WWWForm form = new WWWForm();
-
-        //form.AddField("Login", login);//Encoding.UTF8
-        //form.AddField("Password", password);
-        form.AddField("Login", "supper24");//Encoding.UTF8
-        form.AddField("Password", "123123");
-        UnityWebRequest www = UnityWebRequest.Post(URL, form);
-        www.SetRequestHeader("Content-Type", "application/json");
-        yield return www.SendWebRequest();
-
-        if (www.result != UnityWebRequest.Result.Success || www.isNetworkError || www.isHttpError)
-        {
-            Debug.Log("Error");
-            Debug.Log(login + " " + password);
-            Debug.Log(www.error);
-            yield break;
-        }
-        else
-        {
-            Debug.Log("Form upload complete!");
-            Debug.Log(www.downloadHandler.text);
-        }
-    }*/
+    
     IEnumerator Post(string url, string bodyJsonString)
     {
         var request = new UnityWebRequest(url, "POST");
@@ -57,13 +34,32 @@ public class AuthMenu : MonoBehaviour
         Debug.Log("Status Code: " + request.responseCode);
         if (request.result != UnityWebRequest.Result.Success || request.isNetworkError || request.isHttpError)
         {
-            Debug.Log(request.error + " "+ bodyJsonString);
+            Debug.Log(request.error );
             yield break;
         }
         else
         {
             Debug.Log("Form upload complete!");
-            Debug.Log(request.downloadHandler.text);
+            JSONNode playerDataJSON = JSON.Parse(request.downloadHandler.text);
+            PlayerInfo playerInfo = new PlayerInfo
+            {
+                Id = playerDataJSON["internalValue"]["playerInfo"]["id"],
+                PassedGames = playerDataJSON["internalValue"]["playerInfo"]["passedGames"],
+                MaxKills = playerDataJSON["internalValue"]["playerInfo"]["maxKills"],
+                MaxDamage = playerDataJSON["internalValue"]["playerInfo"]["maxDamage"]
+            };
+            Debug.Log(playerInfo);
+            playerData = new PlayerData
+            {
+                PlayerId = playerDataJSON["internalValue"]["id"],
+                PlayerLogin = playerDataJSON["internalValue"]["login"],
+                PlayerNickName = playerDataJSON["internalValue"]["gameLogin"],
+                PlayerInfo = playerInfo
+            };
+            GameObject.Find("PlayerAuthenticator").GetComponent<PlayerDataStore>().isAuthorize = true;
+            GameObject.Find("PlayerAuthenticator").GetComponent<PlayerDataStore>().playerData = playerData;
+            this.gameObject.SetActive(false);
+            profileMenu.SetActive(true);
         }
     }
     

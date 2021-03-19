@@ -8,13 +8,11 @@ public class CustomAuthenticator : NetworkAuthenticator
     public int PlayerId { get; set; }
     public string PlayerNickName { get; set; }
     public string PlayerLogin { get; set; }
-    public string PlayerPassword { get; set; }
-    public string PlayerToken { get; set; }
 
     public struct AuthRequestMessage : NetworkMessage
     {
         public string authUsername;
-        public string authPassword;
+        //public string authPassword;
     }
 
     public struct AuthResponseMessage : NetworkMessage
@@ -34,7 +32,7 @@ public class CustomAuthenticator : NetworkAuthenticator
     public override void OnServerAuthenticate(NetworkConnection conn){}
     public void OnAuthRequestMessage(NetworkConnection conn, AuthRequestMessage msg)
     {
-        if (PlayerId!=0 && PlayerNickName!=null && PlayerLogin!=null && PlayerPassword!=null && PlayerToken!=null)
+        if (true)//PlayerId!=0 && PlayerNickName!=null && PlayerLogin!=null
         {
             AuthResponseMessage authResponseMessage = new AuthResponseMessage
             {
@@ -46,9 +44,8 @@ public class CustomAuthenticator : NetworkAuthenticator
             PlayerData playerData = new PlayerData { 
                 PlayerId = PlayerId, 
                 PlayerLogin = PlayerLogin, 
-                PlayerNickName = PlayerNickName, 
-                PlayerPassword = PlayerPassword, 
-                PlayerToken = PlayerToken };
+                PlayerNickName = PlayerNickName
+            };
 
             conn.authenticationData = playerData;
             // Accept the successful authentication
@@ -91,8 +88,7 @@ public class CustomAuthenticator : NetworkAuthenticator
     {
         AuthRequestMessage authRequestMessage = new AuthRequestMessage
         {
-            authUsername = PlayerLogin ,
-            authPassword = PlayerPassword
+            authUsername = PlayerLogin
         };
         conn.Send(authRequestMessage);
     }
