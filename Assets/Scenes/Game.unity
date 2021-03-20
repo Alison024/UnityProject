@@ -491,7 +491,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &231507995
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2923,7 +2923,7 @@ GameObject:
   - component: {fileID: 1321902965}
   - component: {fileID: 1321902964}
   m_Layer: 5
-  m_Name: Text
+  m_Name: HealthText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
