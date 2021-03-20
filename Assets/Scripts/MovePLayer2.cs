@@ -18,6 +18,7 @@ public class MovePLayer2 : NetworkBehaviour
     const string BEHIND_CALM = "behindCalm";
     const string BEHIND_RUN = "behindRun";
     const string SIDE_WAY_RUN = "sideWayRun";
+    const string SIDE_WAY_RUN_LEFT = "sideWayRunLeft";
     const string IN_FRON_RUN = "inFromRun";
 
     void Start()
@@ -44,8 +45,8 @@ public class MovePLayer2 : NetworkBehaviour
         if (horizontal < 0 && vertical == 0)//move left
         {
             isBehindRun = false;
-            spriteRenderer.flipX = isFlipX;
-            ChangeAnimationState(SIDE_WAY_RUN);
+            //spriteRenderer.flipX = isFlipX;
+            ChangeAnimationState(SIDE_WAY_RUN_LEFT);
         }
         else if (horizontal > 0 && vertical == 0)//move right
         {
@@ -56,14 +57,14 @@ public class MovePLayer2 : NetworkBehaviour
         else if (horizontal < 0 && vertical > 0)//move left up
         {
             isBehindRun = false;
-            spriteRenderer.flipX = isFlipX;
-            ChangeAnimationState(SIDE_WAY_RUN);
+            //spriteRenderer.flipX = isFlipX;
+            ChangeAnimationState(SIDE_WAY_RUN_LEFT);
         }
         else if (horizontal < 0 && vertical < 0)//move left down
         {
             isBehindRun = false;
-            spriteRenderer.flipX = isFlipX;
-            ChangeAnimationState(SIDE_WAY_RUN);
+            //spriteRenderer.flipX = isFlipX;
+            ChangeAnimationState(SIDE_WAY_RUN_LEFT);
         }
         else if (horizontal > 0 && vertical > 0)//move right up
         {

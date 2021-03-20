@@ -29,10 +29,15 @@ public class WeaponScript : NetworkBehaviour
     private SpriteRenderer weaponSpriteRenderer;
     private GameObject equippedWeaponGo;
 
+    public GameObject bulletImgPrefab;
+    private GameObject ammoPanel;
+
     [SyncVar(hook = nameof(OnChangeWeapon))]
     private EquippedWeapon equippedWeapon = EquippedWeapon.nothing;
     private bool isFlipWeaponY = false;
 
+    private AudioSource shoot;
+    private AudioSource reload;
     void Start()
     {
         bulletSpeed = 15;
@@ -42,8 +47,14 @@ public class WeaponScript : NetworkBehaviour
         reloadTime = 2;
         isReloading = false;
         lastFire = 0;
-        currentMagazine = magazine;
+        currentMagazine = 0;
+        shoot = transform.Find("ShootAudioSourse").GetComponent<AudioSource>();
+        reload = transform.Find("ReloadAudioSource").GetComponent<AudioSource>();
         weaponParent = transform.Find("WeaponRight").gameObject;
+        if (isLocalPlayer)
+        {
+            ammoPanel = GameObject.Find("AmmoPanel");
+        }
     }
 
     void Update()
@@ -63,6 +74,11 @@ public class WeaponScript : NetworkBehaviour
     {
         if (newEquippedWeapon == EquippedWeapon.ak47 && weaponParent!=null)
         {
+            currentMagazine = magazine;
+            if (isLocalPlayer)
+            {
+                ReloadAmmmoUI();
+            }
             Vector3 weaponPos = weaponParent.transform.position;
             equippedWeaponGo = Instantiate(equippedWeaponPrefab, 
                 new Vector3(weaponParent.transform.position.x + 0.9f, weaponParent.transform.position.y, weaponParent.transform.position.z),
@@ -132,13 +148,16 @@ public class WeaponScript : NetworkBehaviour
     
     private void StartReloading()
     {
+        reload.PlayOneShot(reload.clip);
         isReloading = true;
         Invoke("EndReloading", reloadTime);
     }
     private void EndReloading()
     {
+        reload.Stop();
         isReloading = false;
         currentMagazine = magazine;
+        ReloadAmmmoUI();
     }
     private void Fire()
     {
@@ -152,8 +171,31 @@ public class WeaponScript : NetworkBehaviour
             {
                 lastFire = Time.time;
                 CmdFire();
+                shoot.PlayOneShot(shoot.clip);
                 currentMagazine--;
+                DecrementAmmoUI();
             }
+        }
+    }
+    private void ReloadAmmmoUI()
+    {
+        if (!isLocalPlayer)
+            return;
+        for(int i = 0; i < magazine; i++)
+        {
+            Instantiate(bulletImgPrefab, ammoPanel.transform);
+        }
+    }
+    private void DecrementAmmoUI()
+    {
+        if (!isLocalPlayer)
+        {
+            return;
+        }
+        if (ammoPanel.transform.childCount > 0)
+        {
+            Destroy(ammoPanel.transform.GetChild(0).gameObject);
+            
         }
     }
 }
