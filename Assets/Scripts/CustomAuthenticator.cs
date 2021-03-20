@@ -89,7 +89,7 @@ public class CustomAuthenticator : NetworkAuthenticator
     {
         AuthRequestMessage authRequestMessage = new AuthRequestMessage
         {
-            authUsername = PlayerLogin
+            authUsername = playerData.PlayerLogin
         };
         conn.Send(authRequestMessage);
     }
